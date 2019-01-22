@@ -1,0 +1,23 @@
+{
+	"systemId" : "res01sys03",
+	"implClassName": "com.upm.miot.asp.smartresidential.control.BaseSystemController",
+	"mqttConfig": 
+		{
+			"brokerUrl":"tcp://83.33.120.33:1883"
+		},
+				"additionalProperties" : {
+		},
+	"sensors" : [ 
+	{
+		"type":"temperature",
+		"maxValue": 30,
+		"minValue": 0
+	}
+	],
+	"actuators" : [ {
+	"type" : "valve"
+	}
+		
+	] 
+	
+}

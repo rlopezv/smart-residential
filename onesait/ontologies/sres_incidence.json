@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "sres_incidence",
+    "type": "object",
+    "required": [
+        "sysId",
+        "modified",
+        "status",
+        "creation"
+    ],
+    "properties": {
+        "sysId": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "modified": {
+            "type": "string"
+        },
+        "status": {
+            "type": "string"
+        },
+        "creation": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "description": "Info sres_incidence",
+    "additionalProperties": true
+}

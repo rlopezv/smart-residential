@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "sres_system_command",
+    "type": "object",
+    "required": [
+        "sysId",
+        "command"
+    ],
+    "properties": {
+        "sysId": {
+            "type": "string"
+        },
+        "command": {
+            "type": "string"
+        },
+        "content": {
+            "type": "string"
+        },
+        "timestamp": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "description": "Info sres_system_command",
+    "additionalProperties": true
+}

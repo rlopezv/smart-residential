@@ -1,0 +1,28 @@
+{
+	"systemId" : "res01sys02",
+	"implClassName": "com.upm.miot.asp.smartresidential.control.BaseSystemController",
+	"mqttConfig": 
+		{
+			"brokerUrl":"tcp://83.33.120.33:1883"
+		},
+				"additionalProperties" : {
+		},
+	"sensors" : [ 
+	{
+		"type":"luminosity",
+		"maxValue": 100,
+		"minValue": 0
+	},
+	{
+		"type":"sound",
+		"maxValue": 0,
+		"minValue": 70
+	}
+	],
+	"actuators" : [ {
+	"type" : "light"
+	}
+		
+	] 
+	
+}

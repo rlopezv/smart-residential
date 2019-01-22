@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "sres_weather_forecast",
+    "type": "object",
+    "required": [
+        "postalCode",
+        "date"
+    ],
+    "properties": {
+        "postalCode": {
+            "type": "string"
+        },
+        "date": {
+            "type": "string"
+        },
+        "precipitationChance": {
+            "type": "number"
+        },
+        "minTemp": {
+            "type": "number"
+        },
+        "maxTemp": {
+            "type": "number"
+        }
+    },
+    "description": "Info sres_weather_forecast",
+    "additionalProperties": true
+}

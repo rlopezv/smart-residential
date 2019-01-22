@@ -1,0 +1,435 @@
+[
+  {
+    "id": "326c1cb5.696724",
+    "type": "tab",
+    "label": "sres_generate_irrigation_plan",
+    "disabled": false,
+    "info": ""
+  },
+  {
+    "id": "9e52fa28.d8d0b8",
+    "type": "inject",
+    "z": "326c1cb5.696724",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "",
+    "x": 120,
+    "y": 80,
+    "wires": [
+      [
+        "71be4a0e.c3b254"
+      ]
+    ]
+  },
+  {
+    "id": "71be4a0e.c3b254",
+    "type": "onesaitplatform-query-static",
+    "z": "326c1cb5.696724",
+    "name": "Obtain irrigation systems",
+    "ontology": "sres_estate_system",
+    "targetDB": "",
+    "queryType": "sql",
+    "query": "select * from sres_estate_system as c, sres_estate as e where e.resId = c.resId and c.type='IRRIGATION'",
+    "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+    "x": 350,
+    "y": 80,
+    "wires": [
+      [
+        "e7199412.038e18"
+      ]
+    ]
+  },
+  {
+    "id": "e7199412.038e18",
+    "type": "json",
+    "z": "326c1cb5.696724",
+    "name": "",
+    "property": "payload",
+    "action": "",
+    "pretty": false,
+    "x": 130,
+    "y": 160,
+    "wires": [
+      [
+        "1e0a1ef.92d02e1"
+      ]
+    ]
+  },
+  {
+    "id": "5bdcf8dc.566758",
+    "type": "debug",
+    "z": "326c1cb5.696724",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "x": 1030,
+    "y": 520,
+    "wires": []
+  },
+  {
+    "id": "8e7db45.d645848",
+    "type": "change",
+    "z": "326c1cb5.696724",
+    "name": "move system data",
+    "rules": [
+      {
+        "t": "set",
+        "p": "system",
+        "pt": "msg",
+        "to": "payload",
+        "tot": "msg"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "null",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 250,
+    "y": 240,
+    "wires": [
+      [
+        "c318383f.fac878"
+      ]
+    ]
+  },
+  {
+    "id": "1e0a1ef.92d02e1",
+    "type": "split",
+    "z": "326c1cb5.696724",
+    "name": "",
+    "splt": "\\n",
+    "spltType": "str",
+    "arraySplt": 1,
+    "arraySpltType": "len",
+    "stream": false,
+    "addname": "",
+    "x": 80,
+    "y": 280,
+    "wires": [
+      [
+        "8e7db45.d645848"
+      ]
+    ]
+  },
+  {
+    "id": "1c3fb9c8.606676",
+    "type": "onesaitplatform-query-dynamic",
+    "z": "326c1cb5.696724",
+    "name": "Obtain forecast",
+    "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+    "x": 460,
+    "y": 300,
+    "wires": [
+      [
+        "9a2500fd.06218"
+      ]
+    ]
+  },
+  {
+    "id": "c318383f.fac878",
+    "type": "function",
+    "z": "326c1cb5.696724",
+    "name": "generate forecast query",
+    "func": "var postalCode = msg.system.postalCode;\nmsg.ontology = 'sres_weather_forecast';\nmsg.queryType='SQL';\n//Obtains weather forecast\nmsg.query = 'select * from sres_weather_forecast as c where c.postalCode = \"'+postalCode+'\" order by date DESC limit 1';\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 470,
+    "y": 240,
+    "wires": [
+      [
+        "1c3fb9c8.606676"
+      ]
+    ]
+  },
+  {
+    "id": "9a2500fd.06218",
+    "type": "json",
+    "z": "326c1cb5.696724",
+    "name": "",
+    "property": "payload",
+    "action": "",
+    "pretty": false,
+    "x": 290,
+    "y": 340,
+    "wires": [
+      [
+        "7372c006.1c1d"
+      ]
+    ]
+  },
+  {
+    "id": "734e4d78.713904",
+    "type": "change",
+    "z": "326c1cb5.696724",
+    "name": "move forecast",
+    "rules": [
+      {
+        "t": "set",
+        "p": "forecast",
+        "pt": "msg",
+        "to": "payload[0]",
+        "tot": "msg"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "null",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 540,
+    "y": 360,
+    "wires": [
+      [
+        "d7bc8cde.03f37"
+      ]
+    ]
+  },
+  {
+    "id": "7372c006.1c1d",
+    "type": "switch",
+    "z": "326c1cb5.696724",
+    "name": "check forecast",
+    "property": "payload",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "nempty"
+      },
+      {
+        "t": "empty"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 180,
+    "y": 380,
+    "wires": [
+      [
+        "734e4d78.713904"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "d7bc8cde.03f37",
+    "type": "function",
+    "z": "326c1cb5.696724",
+    "name": "generate last measure query",
+    "func": "var sysId = msg.system.sysId;\nmsg.ontology = 'sres_irrigation_data';\nmsg.queryType='SQL';\n//Obtains weather forecast\nmsg.query = 'select * from sres_irrigation_data as c where c.sysId = \"'+sysId+'\" order by timestamp DESC limit 1';\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 780,
+    "y": 320,
+    "wires": [
+      [
+        "1cd342.5ffc1cbf",
+        "36efc9fe.1770f6"
+      ]
+    ]
+  },
+  {
+    "id": "1cd342.5ffc1cbf",
+    "type": "onesaitplatform-query-dynamic",
+    "z": "326c1cb5.696724",
+    "name": "Obtain last measure",
+    "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+    "x": 340,
+    "y": 460,
+    "wires": [
+      [
+        "711e8081.a6724"
+      ]
+    ]
+  },
+  {
+    "id": "711e8081.a6724",
+    "type": "json",
+    "z": "326c1cb5.696724",
+    "name": "",
+    "property": "payload",
+    "action": "",
+    "pretty": false,
+    "x": 530,
+    "y": 480,
+    "wires": [
+      [
+        "d8a775bf.e7b658",
+        "e6441da8.d5cc"
+      ]
+    ]
+  },
+  {
+    "id": "d8a775bf.e7b658",
+    "type": "switch",
+    "z": "326c1cb5.696724",
+    "name": "check last measure",
+    "property": "payload",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "nempty"
+      },
+      {
+        "t": "empty"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 650,
+    "y": 420,
+    "wires": [
+      [
+        "6d09291f.55f9c8"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "c14d4838.406928",
+    "type": "function",
+    "z": "326c1cb5.696724",
+    "name": "generate irrigation Plan",
+    "func": "const MAX_SM = 100;\nconst RAIN_CHANCE_1 = 25;\nconst RAIN_CHANCE_2 = 50;\nconst RAIN_CHANCE_3 = 90;\nconst IRRIGATION_TIME_1 = 60;\nconst IRRIGATION_TIME_2 = 30;\nconst IRRIGATION_TIME_3 = 15;\nconst HOURS_TIME = 19 * 60;\nvar forecast = msg.forecast;\nvar irrigationData = msg.measure;\nvar irrigationPlan = {};\nirrigationPlan.sysId = msg.system.sysId;\nirrigationPlan.date = msg.forecast.date;\nirrigationPlan.sent = false;\n\nvar startTime = new Date(forecast.date);\nvar endTime = new Date(forecast.date);\n\nirrigationPlan.startTimestamp = startTime;\nirrigationPlan.endTimestamp = endTime;\n\n//Algorithm implementation\nif (irrigationData.sm<MAX_SM) {\n    if (forecast.precipitationChance<RAIN_CHANCE_1) {\n        irrigationTime = IRRIGATION_TIME_1;             \n    } else if (forecast.precipitationChance<RAIN_CHANCE_2) {\n        irrigationTime = IRRIGATION_TIME_2;  \n    } else if (forecast.precipitationChance<RAIN_CHANCE_3) {\n        irrigationTime = IRRIGATION_TIME_3; \n    }\n    msg.irragitionTime = irrigationTime;\n    if (irrigationTime>0) {\n      startTime.setTime(startTime.getTime() + HOURS_TIME * 60* 1000);    \n      endTime.setTime(endTime.getTime() + ((irrigationTime+HOURS_TIME) * 60 * 1000));  \n    }\n}\n\nmsg.ontology = 'sres_irrigation_plan';\nmsg.queryType='SQL';\n//Assings Irriation Plan\nmsg.payload = irrigationPlan;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 810,
+    "y": 460,
+    "wires": [
+      [
+        "f227b6fa.ebd818",
+        "778c249f.a99e7c"
+      ]
+    ]
+  },
+  {
+    "id": "6d09291f.55f9c8",
+    "type": "change",
+    "z": "326c1cb5.696724",
+    "name": "move last measure",
+    "rules": [
+      {
+        "t": "set",
+        "p": "measure",
+        "pt": "msg",
+        "to": "payload[0]",
+        "tot": "msg"
+      },
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "null",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 950,
+    "y": 400,
+    "wires": [
+      [
+        "c14d4838.406928",
+        "1f97b199.791a9e"
+      ]
+    ]
+  },
+  {
+    "id": "f227b6fa.ebd818",
+    "type": "onesaitplatform-insert",
+    "z": "326c1cb5.696724",
+    "name": "insert irrigation plan",
+    "ontology": "sres_irrigation_plan",
+    "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+    "x": 770,
+    "y": 520,
+    "wires": [
+      [
+        "5bdcf8dc.566758"
+      ]
+    ]
+  },
+  {
+    "id": "778c249f.a99e7c",
+    "type": "debug",
+    "z": "326c1cb5.696724",
+    "name": "IrrigationPlan",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "x": 970,
+    "y": 620,
+    "wires": []
+  },
+  {
+    "id": "1f97b199.791a9e",
+    "type": "debug",
+    "z": "326c1cb5.696724",
+    "name": "IrrigationData",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "x": 1070,
+    "y": 260,
+    "wires": []
+  },
+  {
+    "id": "e6441da8.d5cc",
+    "type": "debug",
+    "z": "326c1cb5.696724",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "x": 800,
+    "y": 220,
+    "wires": []
+  },
+  {
+    "id": "36efc9fe.1770f6",
+    "type": "debug",
+    "z": "326c1cb5.696724",
+    "name": "Last measure query",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "x": 250,
+    "y": 560,
+    "wires": []
+  }
+]

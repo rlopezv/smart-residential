@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "sres_estate_system",
+    "type": "object",
+    "required": [
+        "sysId",
+        "type",
+        "status",
+        "resId"
+    ],
+    "properties": {
+        "sysId": {
+            "type": "string"
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "IRRIGATION",
+                "LIGHT",
+                "HEATING"
+            ]
+        },
+        "status": {
+            "type": "boolean",
+            "default": false
+        },
+        "resId": {
+            "type": "string"
+        }
+    },
+    "description": "Info sres_estate_system",
+    "additionalProperties": true
+}

@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "sres_alert",
+    "type": "object",
+    "required": [
+        "sysId",
+        "status",
+        "creation"
+    ],
+    "properties": {
+        "sysId": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "modified": {
+            "type": "string"
+        },
+        "status": {
+            "type": "string"
+        },
+        "creation": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "description": "Info sres_alert",
+    "additionalProperties": true
+}

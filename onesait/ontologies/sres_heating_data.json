@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "sres_heating_data",
+    "type": "object",
+    "required": [
+        "sysId",
+        "timestamp"
+    ],
+    "properties": {
+        "sysId": {
+            "type": "string"
+        },
+        "temperature": {
+            "type": "number"
+        },
+        "valve": {
+            "type": "boolean"
+        },
+        "timestamp": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "description": "Info sres_heating_data",
+    "additionalProperties": true
+}

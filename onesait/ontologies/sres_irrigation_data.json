@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "sres_irrigation_data",
+    "type": "object",
+    "required": [
+        "sysId",
+        "timestamp"
+    ],
+    "properties": {
+        "sysId": {
+            "type": "string"
+        },
+        "temperature": {
+            "type": "number"
+        },
+        "humidity": {
+            "type": "number"
+        },
+        "sm": {
+            "type": "number"
+        },
+        "valve": {
+            "type": "boolean"
+        },
+        "timestamp": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "description": "Info sres_irrigation_data",
+    "additionalProperties": true
+}

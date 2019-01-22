@@ -1,0 +1,29 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "sres_lamp_data",
+    "type": "object",
+    "required": [
+        "sysId",
+        "timestamp"
+    ],
+    "properties": {
+        "sysId": {
+            "type": "string"
+        },
+        "luminosity": {
+            "type": "number"
+        },
+        "sound": {
+            "type": "number"
+        },
+        "light": {
+            "type": "boolean"
+        },
+        "timestamp": {
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "description": "Info sres_lamp_data",
+    "additionalProperties": true
+}
