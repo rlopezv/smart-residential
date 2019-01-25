@@ -1,0 +1,100 @@
+[
+    {
+        "id": "fc1b6acb.b94c18",
+        "type": "tab",
+        "label": "sres_check_alert",
+        "disabled": false,
+        "info": "Checks if some limit is in bounds.\nIn other case it will generate an alert."
+    },
+    {
+        "id": "6d2509de.6cd3f8",
+        "type": "link in",
+        "z": "fc1b6acb.b94c18",
+        "name": "check_alert",
+        "links": [
+            "ac7e9571.f4c578"
+        ],
+        "x": 120,
+        "y": 120,
+        "wires": [
+            [
+                "e6a9223c.e67e2",
+                "83844dd3.8cdbc"
+            ]
+        ]
+    },
+    {
+        "id": "e6a9223c.e67e2",
+        "type": "function",
+        "z": "fc1b6acb.b94c18",
+        "name": "check alert bounds",
+        "func": "var alert = {};\nconst MAX_SOUND = 0; \nalert.sysId = msg.data.sysId;\nvar data = msg.data;\nalert.status = 'NEW';\nalert.description = \"Value out of bounds\";\nalert.sensor = null;\nalert.creation = new Date().toISOString();\n\nswitch (msg.type) {\n    case 'LIGHT':\n            if (data.sound>MAX_SOUND) {\n                alert.sensor = \"sound\";\n            }                    \n        break;\n    case 'IRRIGATION':\n            \n        break;\n    case 'HEATING':\n            \n        break;\n}\nmsg.ontology = 'sres_alert';\nmsg.queryType='SQL';\n//Assings alert\nmsg.payload = alert;\nreturn msg;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 120,
+        "wires": [
+            [
+                "ca4037a9.236dd8",
+                "20d68e04.f0aad2"
+            ]
+        ]
+    },
+    {
+        "id": "ca4037a9.236dd8",
+        "type": "onesaitplatform-insert",
+        "z": "fc1b6acb.b94c18",
+        "name": "insert alert",
+        "ontology": "sres_alert",
+        "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+        "x": 610,
+        "y": 120,
+        "wires": [
+            [
+                "7d73aaba.2608c4"
+            ]
+        ]
+    },
+    {
+        "id": "7d73aaba.2608c4",
+        "type": "debug",
+        "z": "fc1b6acb.b94c18",
+        "name": "alert inserted",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 910,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "83844dd3.8cdbc",
+        "type": "debug",
+        "z": "fc1b6acb.b94c18",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 480,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "20d68e04.f0aad2",
+        "type": "debug",
+        "z": "fc1b6acb.b94c18",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 800,
+        "y": 320,
+        "wires": []
+    }
+]

@@ -1,285 +1,237 @@
 [
   {
-    "id": "8c700420.cd1088",
-    "type": "tab",
-    "label": "sres_weather_forecast_flow",
-    "disabled": false,
-    "info": "Contains the data extraction from AEMET.\nIt takes the postal codes included in the system.\nObtains the weather forecast.\nStores the result."
+      "id": "8c700420.cd1088",
+      "type": "tab",
+      "label": "sres_weather_forecast_flow",
+      "disabled": false,
+      "info": "Contains the data extraction from AEMET.\nIt takes the postal codes included in the system.\nObtains the weather forecast.\nStores the result."
   },
   {
-    "id": "4fab3321.c2087c",
-    "type": "inject",
-    "z": "8c700420.cd1088",
-    "name": "",
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": "",
-    "x": 120,
-    "y": 60,
-    "wires": [
-      [
-        "c3b28929.622b18"
+      "id": "4fab3321.c2087c",
+      "type": "inject",
+      "z": "8c700420.cd1088",
+      "name": "",
+      "topic": "",
+      "payload": "",
+      "payloadType": "date",
+      "repeat": "",
+      "crontab": "",
+      "once": false,
+      "onceDelay": "",
+      "x": 120,
+      "y": 60,
+      "wires": [
+          [
+              "c3b28929.622b18"
+          ]
       ]
-    ]
   },
   {
-    "id": "56f320ce.13f15",
-    "type": "http request",
-    "z": "8c700420.cd1088",
-    "name": "get / AEMETData",
-    "method": "GET",
-    "ret": "txt",
-    "url": "https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/{{postalCode}}",
-    "tls": "",
-    "x": 530,
-    "y": 120,
-    "wires": [
-      [
-        "8a0f1a30.a58bb8"
+      "id": "56f320ce.13f15",
+      "type": "http request",
+      "z": "8c700420.cd1088",
+      "name": "get / AEMETData",
+      "method": "GET",
+      "ret": "txt",
+      "url": "https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/{{postalCode}}",
+      "tls": "",
+      "x": 710,
+      "y": 180,
+      "wires": [
+          [
+              "8a0f1a30.a58bb8"
+          ]
       ]
-    ]
   },
   {
-    "id": "b0826f4c.8e452",
-    "type": "function",
-    "z": "8c700420.cd1088",
-    "name": "set payload and headers",
-    "func": "msg.headers = {};\nmsg.headers['api_key'] = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYW1vbi5sb3Blei52aWFuYUBhbHVtbm9zLnVwbS5lcyIsImp0aSI6ImU5MTQ4NDJkLTg0YjgtNDZjYi05YzVkLTVmM2IxZWVhMTYyMiIsImlzcyI6IkFFTUVUIiwiaWF0IjoxNTQzMzY1NDQ3LCJ1c2VySWQiOiJlOTE0ODQyZC04NGI4LTQ2Y2ItOWM1ZC01ZjNiMWVlYTE2MjIiLCJyb2xlIjoiIn0.3TSMmnqIJJHYZ5rC9zdLZlbVymrKdYG9sZCDP8KN-zk';\nmsg.postalCode = msg.payload;\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 410,
-    "y": 260,
-    "wires": [
-      [
-        "56f320ce.13f15"
+      "id": "b0826f4c.8e452",
+      "type": "function",
+      "z": "8c700420.cd1088",
+      "name": "set payload and headers",
+      "func": "msg.headers = {};\nmsg.headers['api_key'] = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYW1vbi5sb3Blei52aWFuYUBhbHVtbm9zLnVwbS5lcyIsImp0aSI6ImU5MTQ4NDJkLTg0YjgtNDZjYi05YzVkLTVmM2IxZWVhMTYyMiIsImlzcyI6IkFFTUVUIiwiaWF0IjoxNTQzMzY1NDQ3LCJ1c2VySWQiOiJlOTE0ODQyZC04NGI4LTQ2Y2ItOWM1ZC01ZjNiMWVlYTE2MjIiLCJyb2xlIjoiIn0.3TSMmnqIJJHYZ5rC9zdLZlbVymrKdYG9sZCDP8KN-zk';\nmsg.postalCode = msg.payload;\nreturn msg;",
+      "outputs": 1,
+      "noerr": 0,
+      "x": 470,
+      "y": 180,
+      "wires": [
+          [
+              "56f320ce.13f15"
+          ]
       ]
-    ]
   },
   {
-    "id": "2d8064cf.049a9c",
-    "type": "debug",
-    "z": "8c700420.cd1088",
-    "name": "Insert Result",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "true",
-    "x": 910,
-    "y": 240,
-    "wires": []
+      "id": "2d8064cf.049a9c",
+      "type": "debug",
+      "z": "8c700420.cd1088",
+      "name": "Insert Result",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "true",
+      "x": 1090,
+      "y": 300,
+      "wires": []
   },
   {
-    "id": "8a0f1a30.a58bb8",
-    "type": "json",
-    "z": "8c700420.cd1088",
-    "name": "",
-    "property": "payload",
-    "action": "",
-    "pretty": false,
-    "x": 250,
-    "y": 340,
-    "wires": [
-      [
-        "2a2380d.bf8278"
+      "id": "8a0f1a30.a58bb8",
+      "type": "json",
+      "z": "8c700420.cd1088",
+      "name": "",
+      "property": "payload",
+      "action": "",
+      "pretty": false,
+      "x": 890,
+      "y": 180,
+      "wires": [
+          [
+              "2a2380d.bf8278"
+          ]
       ]
-    ]
   },
   {
-    "id": "8d5bbdec.b84d5",
-    "type": "http request",
-    "z": "8c700420.cd1088",
-    "name": "",
-    "method": "GET",
-    "ret": "obj",
-    "url": "",
-    "tls": "",
-    "x": 470,
-    "y": 400,
-    "wires": [
-      [
-        "fad95f04.c9932"
+      "id": "8d5bbdec.b84d5",
+      "type": "http request",
+      "z": "8c700420.cd1088",
+      "name": "",
+      "method": "GET",
+      "ret": "obj",
+      "url": "",
+      "tls": "",
+      "x": 390,
+      "y": 300,
+      "wires": [
+          [
+              "fad95f04.c9932"
+          ]
       ]
-    ]
   },
   {
-    "id": "2a2380d.bf8278",
-    "type": "function",
-    "z": "8c700420.cd1088",
-    "name": "Obtain Data",
-    "func": "msg.headers = {};\nmsg.headers['api_key'] = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYW1vbi5sb3Blei52aWFuYUBhbHVtbm9zLnVwbS5lcyIsImp0aSI6ImU5MTQ4NDJkLTg0YjgtNDZjYi05YzVkLTVmM2IxZWVhMTYyMiIsImlzcyI6IkFFTUVUIiwiaWF0IjoxNTQzMzY1NDQ3LCJ1c2VySWQiOiJlOTE0ODQyZC04NGI4LTQ2Y2ItOWM1ZC01ZjNiMWVlYTE2MjIiLCJyb2xlIjoiIn0.3TSMmnqIJJHYZ5rC9zdLZlbVymrKdYG9sZCDP8KN-zk';\nmsg.url = msg.payload.datos;\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 450,
-    "y": 340,
-    "wires": [
-      [
-        "8d5bbdec.b84d5"
+      "id": "2a2380d.bf8278",
+      "type": "function",
+      "z": "8c700420.cd1088",
+      "name": "Obtain Data",
+      "func": "msg.headers = {};\nmsg.headers['api_key'] = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYW1vbi5sb3Blei52aWFuYUBhbHVtbm9zLnVwbS5lcyIsImp0aSI6ImU5MTQ4NDJkLTg0YjgtNDZjYi05YzVkLTVmM2IxZWVhMTYyMiIsImlzcyI6IkFFTUVUIiwiaWF0IjoxNTQzMzY1NDQ3LCJ1c2VySWQiOiJlOTE0ODQyZC04NGI4LTQ2Y2ItOWM1ZC01ZjNiMWVlYTE2MjIiLCJyb2xlIjoiIn0.3TSMmnqIJJHYZ5rC9zdLZlbVymrKdYG9sZCDP8KN-zk';\nmsg.url = msg.payload.datos;\nreturn msg;",
+      "outputs": 1,
+      "noerr": 0,
+      "x": 170,
+      "y": 300,
+      "wires": [
+          [
+              "8d5bbdec.b84d5"
+          ]
       ]
-    ]
   },
   {
-    "id": "fad95f04.c9932",
-    "type": "function",
-    "z": "8c700420.cd1088",
-    "name": "processResponse",
-    "func": "//if (message.payload)\nvar newMsg = {};\nvar data = {};\ndata.postalCode=msg.payload[0].id.toString();\ndata.precipitationChance=msg.payload[0].prediccion.dia[0].probPrecipitacion[0].value;\ndata.maxTemp = msg.payload[0].prediccion.dia[0].temperatura.maxima;\ndata.minTemp = msg.payload[0].prediccion.dia[0].temperatura.minima;\ndata.date = msg.payload[0].prediccion.dia[0].fecha;\nnewMsg.payload = {};\nnewMsg.payload = data;\nnewMsg.ontology = 'sres_weather_forecast';\nreturn [newMsg];",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 630,
-    "y": 460,
-    "wires": [
-      [
-        "5a8c63f8.c683ac"
+      "id": "fad95f04.c9932",
+      "type": "function",
+      "z": "8c700420.cd1088",
+      "name": "processResponse",
+      "func": "//if (message.payload)\nvar newMsg = {};\nvar data = {};\ndata.postalCode=msg.payload[0].id.toString();\ndata.precipitationChance=msg.payload[0].prediccion.dia[0].probPrecipitacion[0].value;\ndata.maxTemp = msg.payload[0].prediccion.dia[0].temperatura.maxima;\ndata.minTemp = msg.payload[0].prediccion.dia[0].temperatura.minima;\ndata.date = msg.payload[0].prediccion.dia[0].fecha;\nnewMsg.payload = {};\nnewMsg.payload = data;\nnewMsg.ontology = 'sres_weather_forecast';\nreturn [newMsg];",
+      "outputs": 1,
+      "noerr": 0,
+      "x": 630,
+      "y": 300,
+      "wires": [
+          [
+              "5a8c63f8.c683ac"
+          ]
       ]
-    ]
   },
   {
-    "id": "f06cc9e8.928028",
-    "type": "inject",
-    "z": "8c700420.cd1088",
-    "name": "",
-    "topic": "",
-    "payload": "It is 4pm on a weekday!",
-    "payloadType": "str",
-    "repeat": "",
-    "crontab": "00 12 * * *",
-    "once": false,
-    "onceDelay": "",
-    "x": 210,
-    "y": 540,
-    "wires": [
-      [
-        "fcc783e3.e4042"
+      "id": "d9ba9c63.a2861",
+      "type": "catch",
+      "z": "8c700420.cd1088",
+      "name": "",
+      "scope": null,
+      "x": 100,
+      "y": 540,
+      "wires": [
+          [
+              "148e8a6b.90aa96"
+          ]
       ]
-    ]
   },
   {
-    "id": "fcc783e3.e4042",
-    "type": "debug",
-    "z": "8c700420.cd1088",
-    "name": "",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "complete": "false",
-    "x": 430,
-    "y": 540,
-    "wires": []
+      "id": "148e8a6b.90aa96",
+      "type": "debug",
+      "z": "8c700420.cd1088",
+      "name": "exception message",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "payload",
+      "x": 350,
+      "y": 540,
+      "wires": []
   },
   {
-    "id": "d9ba9c63.a2861",
-    "type": "catch",
-    "z": "8c700420.cd1088",
-    "name": "",
-    "scope": null,
-    "x": 120,
-    "y": 460,
-    "wires": [
-      [
-        "148e8a6b.90aa96"
+      "id": "5a8c63f8.c683ac",
+      "type": "onesaitplatform-insert",
+      "z": "8c700420.cd1088",
+      "name": "Insert weather forecast",
+      "ontology": "sres_weather_forecast",
+      "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+      "x": 880,
+      "y": 300,
+      "wires": [
+          [
+              "2d8064cf.049a9c"
+          ]
       ]
-    ]
   },
   {
-    "id": "148e8a6b.90aa96",
-    "type": "debug",
-    "z": "8c700420.cd1088",
-    "name": "exception message",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "payload",
-    "x": 360,
-    "y": 460,
-    "wires": []
-  },
-  {
-    "id": "64d1dfb5.a4009",
-    "type": "debug",
-    "z": "8c700420.cd1088",
-    "name": "debug",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "payload",
-    "x": 670,
-    "y": 40,
-    "wires": []
-  },
-  {
-    "id": "5a8c63f8.c683ac",
-    "type": "onesaitplatform-insert",
-    "z": "8c700420.cd1088",
-    "name": "Insert weather forecast",
-    "ontology": "sres_weather_forecast",
-    "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
-    "x": 800,
-    "y": 340,
-    "wires": [
-      [
-        "2d8064cf.049a9c"
+      "id": "c3b28929.622b18",
+      "type": "onesaitplatform-query-static",
+      "z": "8c700420.cd1088",
+      "name": "Obtain estates postal codes",
+      "ontology": "sres_estate",
+      "targetDB": "",
+      "queryType": "sql",
+      "query": "select distinct(postalCode) from sres_estate as c",
+      "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+      "x": 360,
+      "y": 60,
+      "wires": [
+          [
+              "c3a040be.e276b"
+          ]
       ]
-    ]
   },
   {
-    "id": "c3b28929.622b18",
-    "type": "onesaitplatform-query-static",
-    "z": "8c700420.cd1088",
-    "name": "Obtain estates postal codes",
-    "ontology": "sres_estate",
-    "targetDB": "",
-    "queryType": "sql",
-    "query": "select distinct(postalCode) from sres_estate as c",
-    "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
-    "x": 360,
-    "y": 60,
-    "wires": [
-      [
-        "c3a040be.e276b",
-        "64d1dfb5.a4009"
+      "id": "c3a040be.e276b",
+      "type": "json",
+      "z": "8c700420.cd1088",
+      "name": "",
+      "property": "payload",
+      "action": "",
+      "pretty": false,
+      "x": 630,
+      "y": 60,
+      "wires": [
+          [
+              "50991113.63ddc"
+          ]
       ]
-    ]
   },
   {
-    "id": "c3a040be.e276b",
-    "type": "json",
-    "z": "8c700420.cd1088",
-    "name": "",
-    "property": "payload",
-    "action": "",
-    "pretty": false,
-    "x": 100,
-    "y": 180,
-    "wires": [
-      [
-        "50991113.63ddc"
+      "id": "50991113.63ddc",
+      "type": "split",
+      "z": "8c700420.cd1088",
+      "name": "Split postal codes",
+      "splt": "\\n",
+      "spltType": "str",
+      "arraySplt": 1,
+      "arraySpltType": "len",
+      "stream": false,
+      "addname": "postalCode",
+      "x": 190,
+      "y": 180,
+      "wires": [
+          [
+              "b0826f4c.8e452"
+          ]
       ]
-    ]
-  },
-  {
-    "id": "50991113.63ddc",
-    "type": "split",
-    "z": "8c700420.cd1088",
-    "name": "Split postal codes",
-    "splt": "\\n",
-    "spltType": "str",
-    "arraySplt": 1,
-    "arraySpltType": "len",
-    "stream": false,
-    "addname": "postalCode",
-    "x": 300,
-    "y": 160,
-    "wires": [
-      [
-        "b0826f4c.8e452"
-      ]
-    ]
   }
 ]

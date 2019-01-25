@@ -1,0 +1,100 @@
+[
+    {
+        "id": "289fdb02.587fc4",
+        "type": "tab",
+        "label": "sres_insert Incidence",
+        "disabled": false,
+        "info": "Creates an incidence with the given data"
+    },
+    {
+        "id": "a7bba2a0.d7c97",
+        "type": "link in",
+        "z": "289fdb02.587fc4",
+        "name": "insertIncidence",
+        "links": [
+            "eae864cd.e6f5b8"
+        ],
+        "x": 100,
+        "y": 220,
+        "wires": [
+            [
+                "3e590f08.25b72",
+                "909e4d9f.f5aff"
+            ]
+        ]
+    },
+    {
+        "id": "3e590f08.25b72",
+        "type": "function",
+        "z": "289fdb02.587fc4",
+        "name": "generate incidence",
+        "func": "var incidence = {};\nincidence.sysId = msg.sysId;\nincidence.status = 'NEW';\nincidence.description = msg.errorDescription;\nincidence.creation = new Date().toISOString();\nincidence.modified = new Date().toISOString();\n\nmsg.ontology = 'sres_incidence';\nmsg.queryType='SQL';\n//Assings Incidence\nmsg.payload = incidence;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 250,
+        "y": 220,
+        "wires": [
+            [
+                "bea862f6.c0f27",
+                "a469a80e.043eb8"
+            ]
+        ]
+    },
+    {
+        "id": "bea862f6.c0f27",
+        "type": "onesaitplatform-insert",
+        "z": "289fdb02.587fc4",
+        "name": "insert incidence",
+        "ontology": "sres_incidence",
+        "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+        "x": 460,
+        "y": 220,
+        "wires": [
+            [
+                "9c1581a.b39a58"
+            ]
+        ]
+    },
+    {
+        "id": "9c1581a.b39a58",
+        "type": "debug",
+        "z": "289fdb02.587fc4",
+        "name": "indicence inserted",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 670,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "a469a80e.043eb8",
+        "type": "debug",
+        "z": "289fdb02.587fc4",
+        "name": "IncidenceMessage",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 480,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "909e4d9f.f5aff",
+        "type": "debug",
+        "z": "289fdb02.587fc4",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 180,
+        "y": 300,
+        "wires": []
+    }
+]

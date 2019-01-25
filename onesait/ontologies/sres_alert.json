@@ -14,7 +14,7 @@
         "description": {
             "type": "string"
         },
-        "modified": {
+        "sensor": {
             "type": "string"
         },
         "status": {
