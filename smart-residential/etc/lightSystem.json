@@ -3,7 +3,7 @@
 	"implClassName": "com.upm.miot.asp.smartresidential.control.BaseSystemController",
 	"mqttConfig": 
 		{
-			"brokerUrl":"tcp://83.33.120.33:1883"
+			"brokerUrl":"tcp://83.54.31.83:1883"
 		},
 				"additionalProperties" : {
 		},
@@ -15,12 +15,13 @@
 	},
 	{
 		"type":"sound",
-		"maxValue": 0,
-		"minValue": 70
+		"maxValue": 70,
+		"minValue": 0
 	}
 	],
 	"actuators" : [ {
-	"type" : "light"
+		"type" : "light",
+		 "defaultValue" : true
 	}
 		
 	] 

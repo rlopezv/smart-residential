@@ -1,5 +1,5 @@
 {
-	"systemId" : "res01sys03",
+	"systemId" : "res03sys02",
 	"implClassName": "com.upm.miot.asp.smartresidential.control.BaseSystemController",
 	"mqttConfig": 
 		{
@@ -9,14 +9,19 @@
 		},
 	"sensors" : [ 
 	{
-		"type":"temperature",
-		"maxValue": 30,
+		"type":"luminosity",
+		"maxValue": 100,
+		"minValue": 0
+	},
+	{
+		"type":"sound",
+		"maxValue": 70,
 		"minValue": 0
 	}
 	],
 	"actuators" : [ {
-		"type" : "valve",
-		"defaultValue": false
+		"type" : "light",
+		 "defaultValue" : true
 	}
 		
 	] 

@@ -65,6 +65,7 @@ public abstract class AbstractSystemController implements MqttCallback, Runnable
 	private void addActuator(ActuatorConfig actuatorConfig) {
 		SrActuator actuator = new SrActuator();
 		actuator.setType(actuatorConfig.getElementType());
+		actuator.setStatus(actuatorConfig.getDefaultValue());
 		system.addActuator(actuator);
 	}
 

@@ -15,19 +15,10 @@ package com.upm.miot.asp.smartresidential.config;
 public class ActuatorConfig extends ElementConfig {
 
 	private String type;
-	private Double maxValue;
-	private Double minValue;
+	private Boolean defaultValue = Boolean.FALSE;
 
 	public String getElementType() {
 		return type;
-	}
-
-	public Double getMaxValue() {
-		return maxValue;
-	}
-
-	public Double getMinValue() {
-		return minValue;
 	}
 
 	public String getType() {
@@ -38,12 +29,14 @@ public class ActuatorConfig extends ElementConfig {
 		this.type = type;
 	}
 
-	public void setMaxValue(Double maxValue) {
-		this.maxValue = maxValue;
+	public Boolean getDefaultValue() {
+		return defaultValue;
 	}
 
-	public void setMinValue(Double minValue) {
-		this.minValue = minValue;
+	public void setDefaultValue(Boolean defaultValue) {
+		this.defaultValue = defaultValue;
 	}
+
+
 
 }

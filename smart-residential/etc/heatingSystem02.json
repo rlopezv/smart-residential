@@ -1,5 +1,5 @@
 {
-	"systemId" : "res01sys03",
+	"systemId" : "res02sys03",
 	"implClassName": "com.upm.miot.asp.smartresidential.control.BaseSystemController",
 	"mqttConfig": 
 		{
