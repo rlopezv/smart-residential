@@ -1,0 +1,192 @@
+[
+    {
+        "id": "12e15f36.8fd691",
+        "type": "tab",
+        "label": "sres_heating_process",
+        "disabled": false,
+        "info": "Process light measure.\nChecks if its necessary to activate or deactivate actuator\nbased on temperature value"
+    },
+    {
+        "id": "e700b7e3.66f658",
+        "type": "link in",
+        "z": "12e15f36.8fd691",
+        "name": "evaluate_heating_measure",
+        "links": [
+            "dbd526b8.e16918",
+            "89c90f3a.f0975"
+        ],
+        "x": 75,
+        "y": 100,
+        "wires": [
+            [
+                "5a5fbc04.c2cbd4"
+            ]
+        ]
+    },
+    {
+        "id": "98b95097.10ccc",
+        "type": "mqtt out",
+        "z": "12e15f36.8fd691",
+        "name": "send_mqtt_command",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "broker": "d3c3ccbb.eb88e",
+        "x": 680,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "d738ad0c.dd533",
+        "type": "function",
+        "z": "12e15f36.8fd691",
+        "name": "generate_mqtt_message",
+        "func": "msg.topic = \"sr/\"+msg.data.sysId+\"/command/valve\";\nmsg.payload = msg.command;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 510,
+        "y": 240,
+        "wires": [
+            [
+                "98b95097.10ccc"
+            ]
+        ]
+    },
+    {
+        "id": "5a5fbc04.c2cbd4",
+        "type": "function",
+        "z": "12e15f36.8fd691",
+        "name": "Check actuator activation",
+        "func": "const MIN_TEMPERATURE = 20;\nconst MAX_TEMPERATURE = 30;\nvar val = msg.data.temperature;\nvar status = msg.data.valve;\nnode.log(val);\nnode.log(status);\n\nif (val> MAX_TEMPERATURE && status) {\n    msg.command = 'off';\n    return msg;  \n} else if (val< MIN_TEMPERATURE && !status) {\n    msg.command = 'on';\n    return msg;  \n}\n\n  \n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 270,
+        "y": 60,
+        "wires": [
+            [
+                "97495f38.4dd25",
+                "835a2cb1.5fa0f"
+            ]
+        ]
+    },
+    {
+        "id": "97495f38.4dd25",
+        "type": "switch",
+        "z": "12e15f36.8fd691",
+        "name": "",
+        "property": "command",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 230,
+        "y": 220,
+        "wires": [
+            [
+                "d738ad0c.dd533",
+                "ef33575e.dc3e98"
+            ]
+        ]
+    },
+    {
+        "id": "ef33575e.dc3e98",
+        "type": "function",
+        "z": "12e15f36.8fd691",
+        "name": "generate command",
+        "func": "var command = {};\ncommand.sysId = msg.data.sysId;\ncommand.command = 'actuator';\ncommand.timestamp = new Date().toISOString();\ncommand.content = JSON.stringify(msg.payload);\n\nmsg.ontology = 'sres_system_command';\nmsg.queryType='SQL';\nmsg.payload = command;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 490,
+        "y": 320,
+        "wires": [
+            [
+                "53ddd061.c9023",
+                "c704867b.1d6288"
+            ]
+        ]
+    },
+    {
+        "id": "53ddd061.c9023",
+        "type": "onesaitplatform-insert",
+        "z": "12e15f36.8fd691",
+        "name": "insert actuator command",
+        "ontology": "sres_system_command",
+        "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+        "x": 810,
+        "y": 320,
+        "wires": [
+            [
+                "a195a980.bdb248"
+            ]
+        ]
+    },
+    {
+        "id": "a195a980.bdb248",
+        "type": "debug",
+        "z": "12e15f36.8fd691",
+        "name": "inserted heating command",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 1080,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "c704867b.1d6288",
+        "type": "debug",
+        "z": "12e15f36.8fd691",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 780,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "835a2cb1.5fa0f",
+        "type": "debug",
+        "z": "12e15f36.8fd691",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 490,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "d3c3ccbb.eb88e",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "home_server",
+        "broker": "83.54.31.83",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "1",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    }
+]

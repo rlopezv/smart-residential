@@ -1,488 +1,503 @@
 [
-  {
-      "id": "2d380c2d.77ed64",
-      "type": "tab",
-      "label": "sres_modify_system_status",
-      "disabled": false,
-      "info": ""
-  },
-  {
-      "id": "51f3e484.5386ec",
-      "type": "inject",
-      "z": "2d380c2d.77ed64",
-      "name": "",
-      "topic": "",
-      "payload": "",
-      "payloadType": "date",
-      "repeat": "",
-      "crontab": "",
-      "once": false,
-      "onceDelay": 0.1,
-      "x": 120,
-      "y": 80,
-      "wires": [
-          [
-              "342876ee.1305da"
-          ]
-      ]
-  },
-  {
-      "id": "342876ee.1305da",
-      "type": "onesaitplatform-query-static",
-      "z": "2d380c2d.77ed64",
-      "name": "obtain systems",
-      "ontology": "sres_estate_system",
-      "targetDB": "",
-      "queryType": "sql",
-      "query": "select c.sysId,c._id,c.type from sres_estate_system as c",
-      "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
-      "x": 300,
-      "y": 80,
-      "wires": [
-          [
-              "54458491.aa70ac"
-          ]
-      ]
-  },
-  {
-      "id": "54458491.aa70ac",
-      "type": "json",
-      "z": "2d380c2d.77ed64",
-      "name": "",
-      "property": "payload",
-      "action": "",
-      "pretty": false,
-      "x": 450,
-      "y": 80,
-      "wires": [
-          [
-              "127f7102.eb7f9f"
-          ]
-      ]
-  },
-  {
-      "id": "127f7102.eb7f9f",
-      "type": "split",
-      "z": "2d380c2d.77ed64",
-      "name": "",
-      "splt": "\\n",
-      "spltType": "str",
-      "arraySplt": 1,
-      "arraySpltType": "len",
-      "stream": false,
-      "addname": "",
-      "x": 590,
-      "y": 80,
-      "wires": [
-          [
-              "dc2e4d37.0a236"
-          ]
-      ]
-  },
-  {
-      "id": "8554b251.ce2b5",
-      "type": "switch",
-      "z": "2d380c2d.77ed64",
-      "name": "",
-      "property": "payload",
-      "propertyType": "msg",
-      "rules": [
-          {
-              "t": "nempty"
-          },
-          {
-              "t": "empty"
-          }
-      ],
-      "checkall": "true",
-      "repair": false,
-      "outputs": 2,
-      "x": 550,
-      "y": 220,
-      "wires": [
-          [
-              "46b87f6e.32104"
-          ],
-          [
-              "ca895674.6789b8"
-          ]
-      ]
-  },
-  {
-      "id": "98454ff0.83e0b",
-      "type": "function",
-      "z": "2d380c2d.77ed64",
-      "name": "check disconnected",
-      "func": "var sysId = msg.payload.sysId;\nmsg._id=msg.payload._id;\nmsg.payload = \"\";\nmsg.sysId=sysId;\nmsg.ontology = '';\nmsg.queryType='SQL';\nmsg.ontology = \"sres_irrigation_data\";\n//Obtains last measure\nmsg.query = 'select c.sysId,c._id,c.timestamp from sres_irrigation_data as c where c.sysId =\"'+sysId+'\" order by c.timestamp desc limit 1';\nreturn msg;",
-      "outputs": 1,
-      "noerr": 0,
-      "x": 990,
-      "y": 80,
-      "wires": [
-          [
-              "5e041be3.b4f594"
-          ]
-      ]
-  },
-  {
-      "id": "c9da0f93.0c7a7",
-      "type": "function",
-      "z": "2d380c2d.77ed64",
-      "name": "prepare modify status",
-      "func": "const URL = \"https://www.onesaitplatform.online/api-manager/server/api/v1/sres_estate_system_rs/\";\nconst USER_TOKEN = \"84e58a9d95a442b38adbbcd74cf698e0\";\nmsg._id = msg._id;\nmsg.url = URL+msg._id;\nmsg.headers = {};\nmsg.headers['Content-Type']=\"application/json\";\nmsg.headers[\"X-OP-APIKey\"]= USER_TOKEN;\nmsg.headers['accept']=\"application/json\";\nvar data = {};\ndata.status = msg.status;\nmsg.payload = JSON.stringify(data);\nreturn msg;",
-      "outputs": 1,
-      "noerr": 0,
-      "x": 1000,
-      "y": 280,
-      "wires": [
-          [
-              "89d06138.7e593"
-          ]
-      ]
-  },
-  {
-      "id": "5e041be3.b4f594",
-      "type": "onesaitplatform-query-dynamic",
-      "z": "2d380c2d.77ed64",
-      "name": "",
-      "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
-      "x": 190,
-      "y": 220,
-      "wires": [
-          [
-              "c291858f.29d378"
-          ]
-      ]
-  },
-  {
-      "id": "244d8287.702c9e",
-      "type": "catch",
-      "z": "2d380c2d.77ed64",
-      "name": "",
-      "scope": null,
-      "x": 100,
-      "y": 740,
-      "wires": [
-          [
-              "771fa49e.93b4ec"
-          ]
-      ]
-  },
-  {
-      "id": "771fa49e.93b4ec",
-      "type": "debug",
-      "z": "2d380c2d.77ed64",
-      "name": "Exception",
-      "active": true,
-      "tosidebar": true,
-      "console": false,
-      "tostatus": false,
-      "complete": "true",
-      "x": 260,
-      "y": 740,
-      "wires": []
-  },
-  {
-      "id": "f7a995a1.677048",
-      "type": "mqtt in",
-      "z": "2d380c2d.77ed64",
-      "name": "system status",
-      "topic": "sr/+/status",
-      "qos": "0",
-      "broker": "d3c3ccbb.eb88e",
-      "x": 90,
-      "y": 600,
-      "wires": [
-          [
-              "e70877b8.11ae38"
-          ]
-      ]
-  },
-  {
-      "id": "e70877b8.11ae38",
-      "type": "function",
-      "z": "2d380c2d.77ed64",
-      "name": "Process Message",
-      "func": "const OFF = 'off';\nvar newMsg = {};\nvar sysId;\nvar data = {};\nnewMsg.payload = {};\nif (msg.topic) {\n    var topicItems = msg.topic.split(\"/\");\n    if (topicItems.length==3) {\n        newMsg.sysId = topicItems[1];\n        switch(topicItems[2]) {\n            case 'status' :\n            var content = msg.payload;\n            if (content && OFF === content) {\n                newMsg.status = false;\n            } else {\n                newMsg.status = true;\n            }\n            break;            \n        }\n        return newMsg;\n    }\n    \n}\n",
-      "outputs": 1,
-      "noerr": 0,
-      "x": 310,
-      "y": 600,
-      "wires": [
-          [
-              "69beba22.7b2c84"
-          ]
-      ]
-  },
-  {
-      "id": "89d06138.7e593",
-      "type": "http request",
-      "z": "2d380c2d.77ed64",
-      "name": "MODIFY",
-      "method": "PUT",
-      "ret": "txt",
-      "url": "",
-      "tls": "90aa1899.d32758",
-      "x": 870,
-      "y": 500,
-      "wires": [
-          [
-              "846f91bb.e9123"
-          ]
-      ]
-  },
-  {
-      "id": "46b87f6e.32104",
-      "type": "function",
-      "z": "2d380c2d.77ed64",
-      "name": "check last measure",
-      "func": "const MAX_TIME = 15 * 60 * 1000;\nvar data = msg.payload[0];\nvar lastTime = new Date(data.timestamp);\nvar currentTime = new Date();\nmsg.time= currentTime.getTime() - lastTime.getTime();\nif ((currentTime.getTime() - lastTime.getTime())>MAX_TIME) {\n    msg.status = false;\n} else {\n    msg.status = true;\n}\nreturn msg;",
-      "outputs": 1,
-      "noerr": 0,
-      "x": 750,
-      "y": 220,
-      "wires": [
-          [
-              "c9da0f93.0c7a7"
-          ]
-      ]
-  },
-  {
-      "id": "ca895674.6789b8",
-      "type": "function",
-      "z": "2d380c2d.77ed64",
-      "name": "No measure",
-      "func": "msg.status=false;\nreturn msg;",
-      "outputs": 1,
-      "noerr": 0,
-      "x": 750,
-      "y": 340,
-      "wires": [
-          [
-              "c9da0f93.0c7a7"
-          ]
-      ]
-  },
-  {
-      "id": "846f91bb.e9123",
-      "type": "debug",
-      "z": "2d380c2d.77ed64",
-      "name": "Update result",
-      "active": true,
-      "tosidebar": true,
-      "console": false,
-      "tostatus": false,
-      "complete": "true",
-      "x": 1060,
-      "y": 480,
-      "wires": []
-  },
-  {
-      "id": "c291858f.29d378",
-      "type": "json",
-      "z": "2d380c2d.77ed64",
-      "name": "",
-      "property": "payload",
-      "action": "",
-      "pretty": false,
-      "x": 410,
-      "y": 220,
-      "wires": [
-          [
-              "8554b251.ce2b5"
-          ]
-      ]
-  },
-  {
-      "id": "69beba22.7b2c84",
-      "type": "function",
-      "z": "2d380c2d.77ed64",
-      "name": "Obtain System",
-      "func": "var sysId = msg.sysId;\nmsg._id=msg.payload._id;\nmsg.payload = \"\";\nmsg.sysId=sysId;\nmsg.ontology = '';\nmsg.queryType='SQL';\nmsg.ontology = \"sres_estate_system\";\n//Obtains last measure\nmsg.query = 'select c.sysId,c._id from sres_estate_system as c where c.sysId =\"'+sysId+'\" limit 1';\nreturn msg;",
-      "outputs": 1,
-      "noerr": 0,
-      "x": 520,
-      "y": 600,
-      "wires": [
-          [
-              "7c9440b8.fb10f"
-          ]
-      ]
-  },
-  {
-      "id": "7c9440b8.fb10f",
-      "type": "onesaitplatform-query-dynamic",
-      "z": "2d380c2d.77ed64",
-      "name": "obtain system",
-      "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
-      "x": 740,
-      "y": 600,
-      "wires": [
-          [
-              "4d8ae191.61b92"
-          ]
-      ]
-  },
-  {
-      "id": "4d8ae191.61b92",
-      "type": "json",
-      "z": "2d380c2d.77ed64",
-      "name": "",
-      "property": "payload",
-      "action": "",
-      "pretty": false,
-      "x": 990,
-      "y": 600,
-      "wires": [
-          [
-              "e30b5557.def788"
-          ]
-      ]
-  },
-  {
-      "id": "e30b5557.def788",
-      "type": "change",
-      "z": "2d380c2d.77ed64",
-      "name": "",
-      "rules": [
-          {
-              "t": "set",
-              "p": "_id",
-              "pt": "msg",
-              "to": "payload[0]._id",
-              "tot": "msg"
-          }
-      ],
-      "action": "",
-      "property": "",
-      "from": "",
-      "to": "",
-      "reg": false,
-      "x": 590,
-      "y": 440,
-      "wires": [
-          [
-              "ca895674.6789b8"
-          ]
-      ]
-  },
-  {
-      "id": "dc2e4d37.0a236",
-      "type": "switch",
-      "z": "2d380c2d.77ed64",
-      "name": "",
-      "property": "payload.type",
-      "propertyType": "msg",
-      "rules": [
-          {
-              "t": "eq",
-              "v": "HEATING",
-              "vt": "str"
-          },
-          {
-              "t": "eq",
-              "v": "IRRIGATION",
-              "vt": "str"
-          },
-          {
-              "t": "eq",
-              "v": "LIGHT",
-              "vt": "str"
-          }
-      ],
-      "checkall": "true",
-      "repair": false,
-      "outputs": 3,
-      "x": 790,
-      "y": 80,
-      "wires": [
-          [
-              "e5111e31.1dff6"
-          ],
-          [
-              "98454ff0.83e0b"
-          ],
-          [
-              "22995635.071c4a"
-          ]
-      ]
-  },
-  {
-      "id": "e5111e31.1dff6",
-      "type": "function",
-      "z": "2d380c2d.77ed64",
-      "name": "check disconnected",
-      "func": "var sysId = msg.payload.sysId;\nmsg._id=msg.payload._id;\nmsg.payload = \"\";\nmsg.sysId=sysId;\nmsg.ontology = '';\nmsg.queryType='SQL';\nmsg.ontology = \"sres_heating_data\";\n//Obtains last measure\nmsg.query = 'select c.sysId,c._id,c.timestamp from sres_heating_data as c where c.sysId =\"'+sysId+'\" order by c.timestamp desc limit 1';\nreturn msg;",
-      "outputs": 1,
-      "noerr": 0,
-      "x": 990,
-      "y": 40,
-      "wires": [
-          [
-              "5e041be3.b4f594"
-          ]
-      ]
-  },
-  {
-      "id": "22995635.071c4a",
-      "type": "function",
-      "z": "2d380c2d.77ed64",
-      "name": "check disconnected",
-      "func": "var sysId = msg.payload.sysId;\nmsg._id=msg.payload._id;\nmsg.payload = \"\";\nmsg.sysId=sysId;\nmsg.ontology = '';\nmsg.queryType='SQL';\nmsg.ontology = \"sres_lamp_data\";\n//Obtains last measure\nmsg.query = 'select c.sysId,c._id,c.timestamp from sres_lamp_data as c where c.sysId =\"'+sysId+'\" order by c.timestamp desc limit 1';\nreturn msg;",
-      "outputs": 1,
-      "noerr": 0,
-      "x": 970,
-      "y": 120,
-      "wires": [
-          [
-              "5e041be3.b4f594"
-          ]
-      ]
-  },
-  {
-      "id": "66398f91.60028",
-      "type": "comment",
-      "z": "2d380c2d.77ed64",
-      "name": "Last will treatment",
-      "info": "Handles last will and testament message",
-      "x": 110,
-      "y": 540,
-      "wires": []
-  },
-  {
-      "id": "d3c3ccbb.eb88e",
-      "type": "mqtt-broker",
-      "z": "",
-      "name": "home_server",
-      "broker": "83.46.254.248",
-      "port": "1883",
-      "clientid": "",
-      "usetls": false,
-      "compatmode": true,
-      "keepalive": "60",
-      "cleansession": true,
-      "birthTopic": "",
-      "birthQos": "1",
-      "birthPayload": "",
-      "closeTopic": "",
-      "closeQos": "0",
-      "closePayload": "",
-      "willTopic": "",
-      "willQos": "0",
-      "willPayload": ""
-  },
-  {
-      "id": "90aa1899.d32758",
-      "type": "tls-config",
-      "z": "",
-      "name": "No Server verification",
-      "cert": "",
-      "key": "",
-      "ca": "",
-      "certname": "",
-      "keyname": "",
-      "caname": "",
-      "servername": "",
-      "verifyservercert": false
-  }
+    {
+        "id": "2d380c2d.77ed64",
+        "type": "tab",
+        "label": "sres_modify_system_status",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "51f3e484.5386ec",
+        "type": "inject",
+        "z": "2d380c2d.77ed64",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "342876ee.1305da"
+            ]
+        ]
+    },
+    {
+        "id": "342876ee.1305da",
+        "type": "onesaitplatform-query-static",
+        "z": "2d380c2d.77ed64",
+        "name": "obtain systems",
+        "ontology": "sres_estate_system",
+        "targetDB": "",
+        "queryType": "sql",
+        "query": "select c.sysId,c._id,c.type from sres_estate_system as c",
+        "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+        "x": 300,
+        "y": 80,
+        "wires": [
+            [
+                "54458491.aa70ac"
+            ]
+        ]
+    },
+    {
+        "id": "54458491.aa70ac",
+        "type": "json",
+        "z": "2d380c2d.77ed64",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 450,
+        "y": 80,
+        "wires": [
+            [
+                "127f7102.eb7f9f"
+            ]
+        ]
+    },
+    {
+        "id": "127f7102.eb7f9f",
+        "type": "split",
+        "z": "2d380c2d.77ed64",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 590,
+        "y": 80,
+        "wires": [
+            [
+                "dc2e4d37.0a236"
+            ]
+        ]
+    },
+    {
+        "id": "8554b251.ce2b5",
+        "type": "switch",
+        "z": "2d380c2d.77ed64",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "empty"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 550,
+        "y": 220,
+        "wires": [
+            [
+                "46b87f6e.32104"
+            ],
+            [
+                "ca895674.6789b8"
+            ]
+        ]
+    },
+    {
+        "id": "98454ff0.83e0b",
+        "type": "function",
+        "z": "2d380c2d.77ed64",
+        "name": "check disconnected",
+        "func": "var sysId = msg.payload.sysId;\nmsg._id=msg.payload._id;\nmsg.payload = \"\";\nmsg.sysId=sysId;\nmsg.ontology = '';\nmsg.queryType='SQL';\nmsg.ontology = \"sres_irrigation_data\";\n//Obtains last measure\nmsg.query = 'select c.sysId,c._id,c.timestamp from sres_irrigation_data as c where c.sysId =\"'+sysId+'\" order by c.timestamp desc limit 1';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 990,
+        "y": 80,
+        "wires": [
+            [
+                "5e041be3.b4f594"
+            ]
+        ]
+    },
+    {
+        "id": "c9da0f93.0c7a7",
+        "type": "function",
+        "z": "2d380c2d.77ed64",
+        "name": "prepare modify status",
+        "func": "const URL = \"https://www.onesaitplatform.online/api-manager/server/api/v1/sres_estate_system_rs/\";\nconst USER_TOKEN = \"84e58a9d95a442b38adbbcd74cf698e0\";\nmsg._id = msg._id;\nmsg.url = URL+msg._id;\nmsg.headers = {};\nmsg.headers['Content-Type']=\"application/json\";\nmsg.headers[\"X-OP-APIKey\"]= USER_TOKEN;\nmsg.headers['accept']=\"application/json\";\nvar data = {};\ndata.status = msg.status;\nmsg.payload = JSON.stringify(data);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1000,
+        "y": 280,
+        "wires": [
+            [
+                "89d06138.7e593",
+                "a2a9e1d6.9b08c"
+            ]
+        ]
+    },
+    {
+        "id": "5e041be3.b4f594",
+        "type": "onesaitplatform-query-dynamic",
+        "z": "2d380c2d.77ed64",
+        "name": "",
+        "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+        "x": 190,
+        "y": 220,
+        "wires": [
+            [
+                "c291858f.29d378"
+            ]
+        ]
+    },
+    {
+        "id": "244d8287.702c9e",
+        "type": "catch",
+        "z": "2d380c2d.77ed64",
+        "name": "",
+        "scope": null,
+        "x": 100,
+        "y": 740,
+        "wires": [
+            [
+                "771fa49e.93b4ec"
+            ]
+        ]
+    },
+    {
+        "id": "771fa49e.93b4ec",
+        "type": "debug",
+        "z": "2d380c2d.77ed64",
+        "name": "Exception",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 260,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "f7a995a1.677048",
+        "type": "mqtt in",
+        "z": "2d380c2d.77ed64",
+        "name": "system status",
+        "topic": "sr/+/status",
+        "qos": "0",
+        "broker": "d3c3ccbb.eb88e",
+        "x": 90,
+        "y": 600,
+        "wires": [
+            [
+                "e70877b8.11ae38"
+            ]
+        ]
+    },
+    {
+        "id": "e70877b8.11ae38",
+        "type": "function",
+        "z": "2d380c2d.77ed64",
+        "name": "Process Message",
+        "func": "const OFF = 'off';\nvar newMsg = {};\nvar sysId;\nvar data = {};\nnewMsg.payload = {};\nif (msg.topic) {\n    var topicItems = msg.topic.split(\"/\");\n    if (topicItems.length==3) {\n        newMsg.sysId = topicItems[1];\n        switch(topicItems[2]) {\n            case 'status' :\n            var content = msg.payload;\n            if (content && OFF === content) {\n                newMsg.status = false;\n            } else {\n                newMsg.status = true;\n            }\n            break;            \n        }\n        return newMsg;\n    }\n    \n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 310,
+        "y": 600,
+        "wires": [
+            [
+                "69beba22.7b2c84"
+            ]
+        ]
+    },
+    {
+        "id": "89d06138.7e593",
+        "type": "http request",
+        "z": "2d380c2d.77ed64",
+        "name": "MODIFY",
+        "method": "PUT",
+        "ret": "txt",
+        "url": "",
+        "tls": "90aa1899.d32758",
+        "x": 870,
+        "y": 500,
+        "wires": [
+            [
+                "846f91bb.e9123"
+            ]
+        ]
+    },
+    {
+        "id": "46b87f6e.32104",
+        "type": "function",
+        "z": "2d380c2d.77ed64",
+        "name": "check last measure",
+        "func": "const MAX_TIME = 15 * 60 * 1000;\nvar data = msg.payload[0];\nvar lastTime = new Date(data.timestamp);\nvar currentTime = new Date();\nmsg.time= currentTime.getTime() - lastTime.getTime();\nif ((currentTime.getTime() - lastTime.getTime())>MAX_TIME) {\n    msg.status = false;\n} else {\n    msg.status = true;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 750,
+        "y": 220,
+        "wires": [
+            [
+                "c9da0f93.0c7a7"
+            ]
+        ]
+    },
+    {
+        "id": "ca895674.6789b8",
+        "type": "function",
+        "z": "2d380c2d.77ed64",
+        "name": "No measure",
+        "func": "msg.status=false;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 750,
+        "y": 340,
+        "wires": [
+            [
+                "c9da0f93.0c7a7"
+            ]
+        ]
+    },
+    {
+        "id": "846f91bb.e9123",
+        "type": "debug",
+        "z": "2d380c2d.77ed64",
+        "name": "Update result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1060,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "c291858f.29d378",
+        "type": "json",
+        "z": "2d380c2d.77ed64",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 410,
+        "y": 220,
+        "wires": [
+            [
+                "8554b251.ce2b5"
+            ]
+        ]
+    },
+    {
+        "id": "69beba22.7b2c84",
+        "type": "function",
+        "z": "2d380c2d.77ed64",
+        "name": "Obtain System",
+        "func": "var sysId = msg.sysId;\nmsg._id=msg.payload._id;\nmsg.payload = \"\";\nmsg.sysId=sysId;\nmsg.ontology = '';\nmsg.queryType='SQL';\nmsg.ontology = \"sres_estate_system\";\n//Obtains last measure\nmsg.query = 'select c.sysId,c._id from sres_estate_system as c where c.sysId =\"'+sysId+'\" limit 1';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 520,
+        "y": 600,
+        "wires": [
+            [
+                "7c9440b8.fb10f"
+            ]
+        ]
+    },
+    {
+        "id": "7c9440b8.fb10f",
+        "type": "onesaitplatform-query-dynamic",
+        "z": "2d380c2d.77ed64",
+        "name": "obtain system",
+        "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+        "x": 740,
+        "y": 600,
+        "wires": [
+            [
+                "4d8ae191.61b92"
+            ]
+        ]
+    },
+    {
+        "id": "4d8ae191.61b92",
+        "type": "json",
+        "z": "2d380c2d.77ed64",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 990,
+        "y": 600,
+        "wires": [
+            [
+                "e30b5557.def788"
+            ]
+        ]
+    },
+    {
+        "id": "e30b5557.def788",
+        "type": "change",
+        "z": "2d380c2d.77ed64",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "_id",
+                "pt": "msg",
+                "to": "payload[0]._id",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 440,
+        "wires": [
+            [
+                "ca895674.6789b8"
+            ]
+        ]
+    },
+    {
+        "id": "dc2e4d37.0a236",
+        "type": "switch",
+        "z": "2d380c2d.77ed64",
+        "name": "",
+        "property": "payload.type",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "HEATING",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "IRRIGATION",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "LIGHT",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 790,
+        "y": 80,
+        "wires": [
+            [
+                "e5111e31.1dff6"
+            ],
+            [
+                "98454ff0.83e0b"
+            ],
+            [
+                "22995635.071c4a"
+            ]
+        ]
+    },
+    {
+        "id": "e5111e31.1dff6",
+        "type": "function",
+        "z": "2d380c2d.77ed64",
+        "name": "check disconnected",
+        "func": "var sysId = msg.payload.sysId;\nmsg._id=msg.payload._id;\nmsg.payload = \"\";\nmsg.sysId=sysId;\nmsg.ontology = '';\nmsg.queryType='SQL';\nmsg.ontology = \"sres_heating_data\";\n//Obtains last measure\nmsg.query = 'select c.sysId,c._id,c.timestamp from sres_heating_data as c where c.sysId =\"'+sysId+'\" order by c.timestamp desc limit 1';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 990,
+        "y": 40,
+        "wires": [
+            [
+                "5e041be3.b4f594"
+            ]
+        ]
+    },
+    {
+        "id": "22995635.071c4a",
+        "type": "function",
+        "z": "2d380c2d.77ed64",
+        "name": "check disconnected",
+        "func": "var sysId = msg.payload.sysId;\nmsg._id=msg.payload._id;\nmsg.payload = \"\";\nmsg.sysId=sysId;\nmsg.ontology = '';\nmsg.queryType='SQL';\nmsg.ontology = \"sres_lamp_data\";\n//Obtains last measure\nmsg.query = 'select c.sysId,c._id,c.timestamp from sres_lamp_data as c where c.sysId =\"'+sysId+'\" order by c.timestamp desc limit 1';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 970,
+        "y": 120,
+        "wires": [
+            [
+                "5e041be3.b4f594"
+            ]
+        ]
+    },
+    {
+        "id": "66398f91.60028",
+        "type": "comment",
+        "z": "2d380c2d.77ed64",
+        "name": "Last will treatment",
+        "info": "Handles last will and testament message",
+        "x": 110,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "a2a9e1d6.9b08c",
+        "type": "debug",
+        "z": "2d380c2d.77ed64",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 480,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "d3c3ccbb.eb88e",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "home_server",
+        "broker": "83.54.31.83",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "1",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "90aa1899.d32758",
+        "type": "tls-config",
+        "z": "",
+        "name": "No Server verification",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false
+    }
 ]

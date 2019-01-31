@@ -28,7 +28,7 @@
         "type": "function",
         "z": "fc1b6acb.b94c18",
         "name": "check alert bounds",
-        "func": "var alert = {};\nconst MAX_SOUND = 0; \nalert.sysId = msg.data.sysId;\nvar data = msg.data;\nalert.status = 'NEW';\nalert.description = \"Value out of bounds\";\nalert.sensor = null;\nalert.creation = new Date().toISOString();\n\nswitch (msg.type) {\n    case 'LIGHT':\n            if (data.sound>MAX_SOUND) {\n                alert.sensor = \"sound\";\n            }                    \n        break;\n    case 'IRRIGATION':\n            \n        break;\n    case 'HEATING':\n            \n        break;\n}\nmsg.ontology = 'sres_alert';\nmsg.queryType='SQL';\n//Assings alert\nmsg.payload = alert;\nreturn msg;\n\nreturn msg;",
+        "func": "var alert = {};\nconst MAX_SOUND = 70;\nconst MAX_HEAT = 25;\nconst MAX_SM = 60;\nalert.sysId = msg.data.sysId;\nvar data = msg.data;\nalert.status = 'NEW';\nalert.description = \"Value out of bounds\";\nalert.sensor = null;\nalert.creation = new Date().toISOString();\n\nswitch (msg.type) {\n    case 'LIGHT':\n            if (data.sound>MAX_SOUND) {\n                alert.sensor = \"sound\";\n            }                    \n        break;\n    case 'IRRIGATION':\n            if (data.sm>MAX_SM && data.valve) {\n                alert.sensor = \"sm\";\n            } \n        break;\n    case 'HEATING':\n            if (data.temperature>MAX_HEAT) {\n                alert.sensor = \"temperature\";\n            }\n            break;\n}\n\nif (alert.sensor!=null) {\nmsg.ontology = 'sres_alert';\nmsg.queryType='SQL';\n//Assings alert\nmsg.payload = alert;\n\nreturn msg;    \n}\n",
         "outputs": 1,
         "noerr": 0,
         "x": 350,
@@ -36,7 +36,8 @@
         "wires": [
             [
                 "ca4037a9.236dd8",
-                "20d68e04.f0aad2"
+                "20d68e04.f0aad2",
+                "7ef78855.651b18"
             ]
         ]
     },
@@ -95,6 +96,20 @@
         "complete": "false",
         "x": 800,
         "y": 320,
+        "wires": []
+    },
+    {
+        "id": "7ef78855.651b18",
+        "type": "debug",
+        "z": "fc1b6acb.b94c18",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 740,
+        "y": 40,
         "wires": []
     }
 ]
