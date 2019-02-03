@@ -31,12 +31,14 @@ public class BaseSystemController extends AbstractSystemController {
 
 	@Override
 	protected void handleMessage(Message message) {
-		LOGGER.info("Message recevied:{}", message);
+		LOGGER.debug("Message recevied:{}", message);
 		try {
 			if (message.getTopic().endsWith(AppConstants.PLAN)) {
 				SrIrrigationPlan plan = MessageBuilder.getBuilder().parseObject(message.getMqttMessage().getPayload(),
 						SrIrrigationPlan.class);
-				LOGGER.info("Irrigation Plan:{}", plan);
+				LOGGER.info("*******************Irrigation Plan*******************");
+				LOGGER.info("{}", plan);
+				LOGGER.info("*****************************************************");
 			} else {
 				String actuatorType = message.getTopic().substring(message.getTopic().lastIndexOf("/") + 1,
 						message.getTopic().length());
@@ -45,11 +47,16 @@ public class BaseSystemController extends AbstractSystemController {
 				if (actuator.isPresent() && "off".equalsIgnoreCase(message.getMqttMessage().toString())) {
 					if (actuator.get().getStatus()) {
 						actuator.get().setStatus(Boolean.FALSE);
+						LOGGER.info("*******************Changing actuator status*******************");
 						LOGGER.info("Change actuator status ({}):{}", actuatorType, Boolean.FALSE);
+						LOGGER.info("*****************************************************");
 					}
 				} else if (actuator.isPresent() && "on".equalsIgnoreCase(message.getMqttMessage().toString())) {
 					actuator.get().setStatus(Boolean.TRUE);
+					LOGGER.info("*******************Changing actuator status*******************");
 					LOGGER.info("Change actuator status ({}):{}", actuatorType, Boolean.TRUE);
+					LOGGER.info("*****************************************************");
+					
 				} else {
 					LOGGER.warn("Actuator or command not valid ({}):{}", message.getTopic(),
 							message.getMqttMessage().toString());
@@ -66,6 +73,10 @@ public class BaseSystemController extends AbstractSystemController {
 		SrSystemMeassure message = getSystem().getMeasures();
 		try {
 			getClient().publish(MessageBuilder.getBuilder().buildMessage(message));
+			LOGGER.info("*******************Sent message*******************");
+			LOGGER.info("message:{}", message);
+			LOGGER.info("*****************************************************");
+
 		} catch (MqttException | MessageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

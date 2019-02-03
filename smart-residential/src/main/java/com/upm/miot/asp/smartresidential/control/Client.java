@@ -117,7 +117,7 @@ public class Client {
 		if (message != null) {
 			client.publish(topic, message.getBytes(), getConfig().getQos(), true);
 		}
-		LOGGER.info("Published to ({}):{}", topic, message);
+		LOGGER.debug("Published to ({}):{}", topic, message);
 	}
 
 	String getLastWillTopic() {

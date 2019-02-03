@@ -49,8 +49,8 @@ public class App {
 	}
 
 	public static void main(final String[] args) {
-		String configFile = "/Users/ramon/git/smart-residential/smart-residential/etc/lightSystem.json";
-		System.out.println("Starting client");
+		String configFile = null;//"/Users/ramon/git/smart-residential/smart-residential/etc/irrigationSystem.json";
+		LOGGER.info("Starting client");
 		if (configFile == null && (args == null || args.length == 0)) {
 			System.out.println("Usage: java -jar app.jar filename");
 		} else {

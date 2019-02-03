@@ -172,7 +172,7 @@
      </descriptorRefs>
      <archive>
       <manifest>
-       <mainClass>com.miot.sn.App</mainClass>
+       <mainClass>com.upm.miot.asp.smartreidential.App</mainClass>
       </manifest>
      </archive>
     </configuration>

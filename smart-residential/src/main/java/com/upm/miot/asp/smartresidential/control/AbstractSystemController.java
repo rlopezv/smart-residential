@@ -138,7 +138,7 @@ public abstract class AbstractSystemController implements MqttCallback, Runnable
 	 */
 	@Override
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
-		LOGGER.info("Message arrived ({}):{}", topic, message.toString());
+		LOGGER.debug("Message arrived ({}):{}", topic, message.toString());
 		handleMessage(new Message().topic(topic).mqttMessage(message));
 	}
 
@@ -175,8 +175,9 @@ public abstract class AbstractSystemController implements MqttCallback, Runnable
 				if (getMeasureInterval() > 0) {
 					synchronized (this) {
 						try {
-							wait(getMeasureInterval());
 							generateMessage();
+							wait(getMeasureInterval());
+
 						} catch (InterruptedException e) {
 							LOGGER.error("Error taking measures");
 						}

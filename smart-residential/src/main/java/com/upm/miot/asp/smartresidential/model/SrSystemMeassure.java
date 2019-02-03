@@ -21,4 +21,12 @@ public class SrSystemMeassure implements Serializable {
 		this.measures = measures;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("SrSystemMeassure [measures=").append(measures).append("]");
+		return builder.toString();
+	}
+
+	
 }
